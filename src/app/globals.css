@@ -226,6 +226,7 @@
   --animate-scale-in: scale-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
   --animate-shimmer: shimmer 2.2s ease-in-out infinite;
   --animate-float: float 6s ease-in-out infinite;
+  --animate-marquee-left: marquee-left 25s linear infinite;
 
   @keyframes fade-in {
     from {
@@ -270,6 +271,14 @@
     }
     50% {
       transform: translateY(-10px);
+    }
+  }
+  @keyframes marquee-left {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
     }
   }
 }
@@ -456,6 +465,12 @@
   }
   .animate-float {
     animation: var(--animate-float);
+  }
+  .animate-marquee-left {
+    animation: var(--animate-marquee-left);
+  }
+  .animate-marquee-left:hover {
+    animation-play-state: paused;
   }
 
   .stagger-children > * {

@@ -19,9 +19,12 @@ export function CategoriesContent() {
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-          {Array.from({ length: 10 }).map((_, index) => (
-            <Skeleton key={index} className="aspect-4/3 rounded-xl" />
+        <div className="grid grid-cols-3 gap-x-4 gap-y-6 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
+          {Array.from({ length: 12 }).map((_, index) => (
+            <div key={index} className="flex flex-col items-center gap-1.5">
+              <Skeleton className="size-[96.95px] rounded-2xl lg:size-[140px]" />
+              <Skeleton className="h-2.5 w-14 rounded-full" />
+            </div>
           ))}
         </div>
       ) : isError ? (
@@ -29,7 +32,7 @@ export function CategoriesContent() {
       ) : !categories?.length ? (
         <EmptyState icon={Shapes} title="No categories yet" />
       ) : (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        <div className="grid grid-cols-3 gap-x-4 gap-y-6 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
           {categories.map((category) => (
             <CategoryCard key={category.id} category={category} />
           ))}

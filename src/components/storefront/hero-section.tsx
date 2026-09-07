@@ -5,35 +5,37 @@ import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  ArrowRight,
   Baby,
+  BookOpen,
   Dumbbell,
   Laptop2,
   Popcorn,
   Shapes,
   Shirt,
   ShoppingCart,
+  Smartphone,
   Sofa,
   Sparkles,
 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import { useCategories } from "@/hooks/use-products";
 import { cn } from "@/lib/utils";
 import type { Category } from "@/types/catalog";
 
 const CATEGORY_ICON_RULES: { match: RegExp; icon: React.ComponentType<{ className?: string }> }[] = [
+  { match: /mobile|phone|accessor/i, icon: Smartphone },
   { match: /electronic|device|gadget/i, icon: Laptop2 },
   { match: /fashion|apparel|cloth/i, icon: Shirt },
   { match: /beauty|health|cosmetic/i, icon: Sparkles },
-  { match: /home|living|furniture/i, icon: Sofa },
+  { match: /home|living|furniture|kitchen/i, icon: Sofa },
+  { match: /book/i, icon: BookOpen },
   { match: /sport|outdoor|fitness|gym/i, icon: Dumbbell },
   { match: /grocery|groceries|food|essential/i, icon: ShoppingCart },
   { match: /baby|kid|toy/i, icon: Baby },
   { match: /snack|beverage/i, icon: Popcorn },
 ];
 
-function iconForCategory(name: string) {
+export function iconForCategory(name: string) {
   return CATEGORY_ICON_RULES.find((rule) => rule.match.test(name))?.icon ?? Shapes;
 }
 
@@ -60,9 +62,9 @@ function CategorySidebar({ categories }: { categories: Category[] }) {
 // Drop real banner photos into /public/images/ with these filenames (or
 // change the paths below) to replace the desktop hero banner images.
 const DESKTOP_HERO_SLIDES = [
-  { src: "/images/hero-banner-1.jpg", alt: "Shop smarter, live better" },
-  { src: "/images/hero-banner-2.jpg", alt: "New arrivals every week" },
-  { src: "/images/hero-banner-3.jpg", alt: "Island-wide delivery" },
+  { src: "/images/hero-banner-1.png", alt: "Shop smarter, live better" },
+  { src: "/images/hero-banner-2.png", alt: "New arrivals every week" },
+  { src: "/images/hero-banner-3.png", alt: "Island-wide delivery" },
 ];
 
 // Drop real banner photos into /public/images/ with these filenames (or
@@ -117,13 +119,13 @@ function MobileHeroSlider() {
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        <AnimatePresence initial={false} mode="wait">
+        <AnimatePresence initial={false}>
           <motion.div
             key={activeIndex}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
+            initial={{ x: "100%" }}
+            animate={{ x: "0%" }}
+            exit={{ x: "-100%" }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
             className="absolute inset-0"
           >
             <Image
@@ -161,7 +163,7 @@ export function HeroSection() {
   const [activeSlide, setActiveSlide] = useAutoAdvance(DESKTOP_HERO_SLIDES.length, AUTO_ADVANCE_MS);
 
   return (
-    <section className="relative overflow-hidden">
+    <section className="relative overflow-hidden bg-white md:bg-[#133458]">
       <div className="container-page py-6 md:py-10">
         <MobileHeroSlider />
 
@@ -176,13 +178,13 @@ export function HeroSection() {
           >
             {/* Drop real lifestyle/banner photos at these paths (any aspect
                 ratio — each fills the banner via object-cover). */}
-            <AnimatePresence initial={false} mode="wait">
+            <AnimatePresence initial={false}>
               <motion.div
                 key={activeSlide}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.6 }}
+                initial={{ x: "100%" }}
+                animate={{ x: "0%" }}
+                exit={{ x: "-100%" }}
+                transition={{ duration: 0.6, ease: "easeInOut" }}
                 className="absolute inset-0"
               >
                 <Image
@@ -195,33 +197,6 @@ export function HeroSection() {
                 />
               </motion.div>
             </AnimatePresence>
-            <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/25 to-transparent" />
-
-            <div className="stagger-children relative flex h-full max-w-lg flex-col justify-center gap-5 p-10 lg:p-14">
-              <h1 className="text-display text-4xl leading-[1.05] text-white lg:text-5xl">
-                Shop Smarter. Live Better.
-              </h1>
-              <p className="max-w-md text-base text-pretty text-white/85">
-                Everything you love, all in one place. Discover premium products curated for
-                the modern Sri Lankan lifestyle.
-              </p>
-              <div className="flex flex-wrap gap-3 pt-1">
-                <Button size="lg" variant="gradient" asChild>
-                  <Link href="/products">
-                    Shop now
-                    <ArrowRight className="size-4" />
-                  </Link>
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-white/70 bg-white/10 text-white hover:bg-white/20 hover:text-white"
-                  asChild
-                >
-                  <Link href="/products?sort=latest">Explore deals</Link>
-                </Button>
-              </div>
-            </div>
 
             <div className="absolute right-6 bottom-6 flex items-center gap-1.5">
               {DESKTOP_HERO_SLIDES.map((slide, index) => (

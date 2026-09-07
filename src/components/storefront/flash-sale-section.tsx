@@ -109,9 +109,9 @@ export function FlashSaleSection() {
   const countdown = remainingMs !== null ? formatCountdown(remainingMs) : null;
 
   return (
-    <section className="container-page py-14 sm:py-16">
+    <section className="container-page pt-4 pb-8 sm:pt-16 sm:pb-6">
       <div className="relative">
-        <div className="absolute -inset-4 -z-10 rounded-[0rem] bg-white-500 sm:-inset-6" />
+        <div className="bg-orange-400/50 absolute -inset-4 -z-10 rounded-[2rem] blur-2xl sm:-inset-6" />
 
         <div className="bg-card border-border/60 shadow-luxury-sm rounded-2xl border p-4 sm:rounded-3xl sm:p-7">
           <div className="mb-6 flex flex-wrap items-center justify-between gap-4 sm:mb-8">
