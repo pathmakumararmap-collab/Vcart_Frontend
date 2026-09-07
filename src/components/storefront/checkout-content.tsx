@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { MapPin, Plus, ShoppingBag, Tag } from "lucide-react";
+import { CreditCard, MapPin, Plus, ShoppingBag, Tag, Wallet } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -22,20 +23,25 @@ import { RequireAuth } from "@/components/shared/require-auth";
 import { AddressFormDialog } from "@/components/customer/address-form-dialog";
 import { useCart } from "@/hooks/use-cart";
 import { useAddresses } from "@/hooks/use-addresses";
-import { useCheckout } from "@/hooks/use-orders";
+import { useCheckout, useCheckoutPaymentMethods } from "@/hooks/use-orders";
 import { checkoutSchema, type CheckoutFormValues } from "@/lib/validators/checkout";
 
 function CheckoutForm() {
   const router = useRouter();
   const { data: cart, isLoading: cartLoading } = useCart();
   const { data: addresses, isLoading: addressesLoading } = useAddresses();
+  const { data: paymentMethods, isLoading: paymentMethodsLoading } = useCheckoutPaymentMethods();
   const checkout = useCheckout();
   const [addressDialogOpen, setAddressDialogOpen] = React.useState(false);
+  const [cardNumber, setCardNumber] = React.useState("");
+  const [cardExpiry, setCardExpiry] = React.useState("");
+  const [cardCvv, setCardCvv] = React.useState("");
 
   const form = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutSchema),
     defaultValues: {
       shipping_address_id: undefined,
+      payment_method_id: undefined,
       coupon_code: "",
       notes: "",
     },
@@ -48,7 +54,14 @@ function CheckoutForm() {
     }
   }, [addresses, form]);
 
-  if (cartLoading || addressesLoading) {
+  React.useEffect(() => {
+    if (!form.getValues("payment_method_id") && paymentMethods?.length) {
+      const defaultMethod = paymentMethods.find((method) => method.code === "cod") ?? paymentMethods[0];
+      form.setValue("payment_method_id", defaultMethod.id);
+    }
+  }, [paymentMethods, form]);
+
+  if (cartLoading || addressesLoading || paymentMethodsLoading) {
     return <LoadingSpinner className="min-h-[60vh]" />;
   }
 
@@ -71,7 +84,18 @@ function CheckoutForm() {
     );
   }
 
+  const selectedPaymentMethod = paymentMethods?.find(
+    (method) => method.id === form.watch("payment_method_id")
+  );
+
   const onSubmit = (values: CheckoutFormValues) => {
+    if (selectedPaymentMethod?.code === "online_gateway") {
+      if (!cardNumber.trim() || !cardExpiry.trim() || !cardCvv.trim()) {
+        toast.error("Please fill in the card details to continue.");
+        return;
+      }
+    }
+
     checkout.mutate(
       {
         items: items.map((item) => ({
@@ -82,6 +106,7 @@ function CheckoutForm() {
         shipping_address_id: values.shipping_address_id,
         billing_address_id: values.shipping_address_id,
         coupon_code: values.coupon_code || undefined,
+        payment_method_id: values.payment_method_id,
         notes: values.notes || undefined,
       },
       {
@@ -170,6 +195,95 @@ function CheckoutForm() {
 
           <Card>
             <CardContent className="space-y-5">
+              <h2 className="flex items-center gap-2 font-semibold">
+                <CreditCard className="text-primary size-4" />
+                Payment method
+              </h2>
+
+              {!paymentMethods?.length ? (
+                <EmptyState
+                  title="No payment methods available"
+                  description="Please contact support to complete your order."
+                  className="border-none py-6"
+                />
+              ) : (
+                <FormField
+                  control={form.control}
+                  name="payment_method_id"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <RadioGroup
+                          value={field.value ? String(field.value) : undefined}
+                          onValueChange={(value) => field.onChange(Number(value))}
+                          className="gap-3"
+                        >
+                          {paymentMethods.map((method) => (
+                            <Label
+                              key={method.id}
+                              htmlFor={`payment-${method.id}`}
+                              className="hover:bg-accent/50 hover-lift-sm flex cursor-pointer items-center gap-3 rounded-lg border border-border/60 p-3.5 font-normal has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-primary/5"
+                            >
+                              <RadioGroupItem value={String(method.id)} id={`payment-${method.id}`} />
+                              <span className="flex items-center gap-2 text-sm font-medium">
+                                {method.code === "cod" ? (
+                                  <Wallet className="text-muted-foreground size-4" />
+                                ) : (
+                                  <CreditCard className="text-muted-foreground size-4" />
+                                )}
+                                {method.name}
+                              </span>
+                            </Label>
+                          ))}
+                        </RadioGroup>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+
+              {selectedPaymentMethod?.code === "online_gateway" && (
+                <div className="border-border/60 space-y-3 rounded-lg border p-4">
+                  <p className="text-muted-foreground text-xs">
+                    Demo payment form — no real card details are transmitted or stored.
+                  </p>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <div className="space-y-1.5 sm:col-span-2">
+                      <Label htmlFor="demo-card-number">Card number</Label>
+                      <Input
+                        id="demo-card-number"
+                        placeholder="4242 4242 4242 4242"
+                        value={cardNumber}
+                        onChange={(event) => setCardNumber(event.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label htmlFor="demo-card-expiry">Expiry</Label>
+                      <Input
+                        id="demo-card-expiry"
+                        placeholder="MM/YY"
+                        value={cardExpiry}
+                        onChange={(event) => setCardExpiry(event.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label htmlFor="demo-card-cvv">CVV</Label>
+                      <Input
+                        id="demo-card-cvv"
+                        placeholder="123"
+                        value={cardCvv}
+                        onChange={(event) => setCardCvv(event.target.value)}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="space-y-5">
               <h2 className="font-semibold">Order notes (optional)</h2>
               <FormField
                 control={form.control}
@@ -232,7 +346,7 @@ function CheckoutForm() {
               size="lg"
               variant="gradient"
               className="w-full"
-              disabled={checkout.isPending || !addresses?.length}
+              disabled={checkout.isPending || !addresses?.length || !paymentMethods?.length}
             >
               {checkout.isPending ? "Placing order…" : "Place order"}
             </Button>

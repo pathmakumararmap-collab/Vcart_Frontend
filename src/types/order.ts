@@ -110,6 +110,7 @@ export interface PlaceOrderInput {
   customer_phone?: string;
   customer_email?: string;
   shipping_amount?: number;
+  payment_method_id: number;
   notes?: string;
 }
 

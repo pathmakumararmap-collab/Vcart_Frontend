@@ -36,6 +36,7 @@ export const API_ENDPOINTS = {
     orders: "/customer/orders",
     order: (id: number) => `/customer/orders/${id}`,
     cancelOrder: (id: number) => `/customer/orders/${id}/cancel`,
+    paymentMethods: "/customer/payment-methods",
   },
   admin: {
     contentImages: "/admin/content-images",

@@ -52,6 +52,7 @@ export const queryKeys = {
     all: ["customer-orders"] as const,
     list: (page: number) => ["customer-orders", "list", page] as const,
     detail: (id: number) => ["customer-orders", "detail", id] as const,
+    paymentMethods: ["customer-orders", "payment-methods"] as const,
   },
   adminOrders: {
     all: ["admin-orders"] as const,
