@@ -118,7 +118,7 @@ export function ProductCard({ product, className }: { product: Product; classNam
             showCount
           />
         )}
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col gap-0.5 sm:flex-row sm:items-center sm:gap-2">
           <Currency value={product.current_price} className="tabular-nums text-base font-semibold" />
           {hasDiscount && (
             <Currency
