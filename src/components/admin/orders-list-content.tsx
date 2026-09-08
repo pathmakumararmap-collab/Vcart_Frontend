@@ -410,6 +410,14 @@ export function OrdersListContent() {
       cell: ({ row }) => <PaymentStatusBadge status={row.original.payment_status} />,
     },
     {
+      id: "payment_method",
+      header: "Method",
+      cell: ({ row }) => {
+        const method = row.original.payments?.[0]?.payment_method;
+        return method ? <Badge variant="outline">{method}</Badge> : <span className="text-muted-foreground">—</span>;
+      },
+    },
+    {
       id: "total",
       header: "Total",
       cell: ({ row }) => <Currency value={row.original.total_amount} />,
