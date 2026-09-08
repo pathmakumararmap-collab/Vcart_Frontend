@@ -14,6 +14,7 @@ import {
   PackageX,
   Printer,
   Receipt,
+  StickyNote,
 } from "lucide-react";
 import { z } from "zod";
 
@@ -532,6 +533,18 @@ export function OrderDetailAdminContent({ orderId }: { orderId: number }) {
                 </p>
                 <p className="text-muted-foreground">{order.billing_address.phone}</p>
               </CardContent>
+            </Card>
+          )}
+
+          {order.notes && (
+            <Card>
+              <CardHeader className="border-b">
+                <CardTitle className="text-muted-foreground flex items-center gap-2 text-sm font-semibold">
+                  <StickyNote className="text-primary size-4" />
+                  Order notes
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-6 text-sm whitespace-pre-wrap">{order.notes}</CardContent>
             </Card>
           )}
 
