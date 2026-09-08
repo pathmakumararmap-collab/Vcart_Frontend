@@ -41,6 +41,13 @@ export const customerOrderService = {
     );
     return data.data;
   },
+
+  async paymentMethods(): Promise<PaymentMethod[]> {
+    const { data } = await apiClient.get<ApiResource<PaymentMethod[]>>(
+      API_ENDPOINTS.customer.paymentMethods
+    );
+    return data.data;
+  },
 };
 
 export const adminOrderService = {
