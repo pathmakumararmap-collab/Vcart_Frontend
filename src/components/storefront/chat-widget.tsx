@@ -7,7 +7,7 @@ import { MessageCircle, Send, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuthStore } from "@/store/auth-store";
-import { useMyConversation, useSendChatMessage } from "@/hooks/use-chat";
+import { useMyConversation, useSendChatMessage, useMarkChatRead } from "@/hooks/use-chat";
 import { cn } from "@/lib/utils";
 import type { ChatMessage } from "@/types/chat";
 
@@ -117,19 +117,31 @@ export function ChatWidget() {
   // just while the panel happens to be expanded. That's what lets a
   // reply arrive (and the unread dot appear) while the bubble is closed.
   const { data, isLoading } = useMyConversation();
-  const messages = React.useMemo(() => data?.messages ?? [], [data?.messages]);
+  const markRead = useMarkChatRead();
+  const messages = data?.messages ?? [];
 
-  const [seenCount, setSeenCount] = React.useState(0);
-  const hasUnread = !open && messages.length > seenCount;
-
-  React.useEffect(() => {
-    if (open) setSeenCount(messages.length);
-  }, [open, messages.length]);
+  // Server-persisted, not client session state — so a page refresh
+  // doesn't lose track of what's actually been read.
+  const hasUnread = !open && (data?.conversation.customer_unread_count ?? 0) > 0;
 
   function handleOpen() {
     setOpen(true);
-    setSeenCount(messages.length);
+    if ((data?.conversation.customer_unread_count ?? 0) > 0) {
+      markRead.mutate();
+    }
   }
+
+  // If a new message arrives while the panel is already open, immediately
+  // mark it read again — otherwise the badge would reappear once closed,
+  // even though the customer was actively watching it come in.
+  const prevMessageCountRef = React.useRef(messages.length);
+  React.useEffect(() => {
+    if (open && messages.length !== prevMessageCountRef.current) {
+      markRead.mutate();
+    }
+    prevMessageCountRef.current = messages.length;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, messages.length]);
 
   return (
     <div className="fixed right-4 bottom-4 z-50 sm:right-6 sm:bottom-6">

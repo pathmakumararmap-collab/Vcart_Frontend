@@ -18,6 +18,10 @@ export const customerChatService = {
     );
     return data.data;
   },
+
+  async markRead(): Promise<void> {
+    await apiClient.post(API_ENDPOINTS.customer.chatRead);
+  },
 };
 
 export const adminChatService = {

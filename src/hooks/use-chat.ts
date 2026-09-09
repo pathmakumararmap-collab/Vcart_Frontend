@@ -5,9 +5,9 @@ import { adminChatService, customerChatService } from "@/lib/api/services/chat.s
 import { queryKeys } from "@/lib/query-keys";
 import { getEcho } from "@/lib/echo";
 import { useAuthStore } from "@/store/auth-store";
-import type { ChatMessage } from "@/types/chat";
+import type { ChatMessage, Conversation } from "@/types/chat";
 
-type ThreadData = { conversation: { id: number }; messages: ChatMessage[] };
+type ThreadData = { conversation: Conversation; messages: ChatMessage[] };
 
 function appendMessageIfNew<T extends ThreadData>(old: T | undefined, message: ChatMessage): T | undefined {
   if (!old) return old;
@@ -67,6 +67,7 @@ export function useAdminChatInboxChannel(onNewMessage: () => void) {
 
 export function useMyConversation() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const queryClient = useQueryClient();
 
   const query = useQuery({
     queryKey: queryKeys.chat.mine,
@@ -75,7 +76,33 @@ export function useMyConversation() {
     enabled: isAuthenticated,
   });
 
-  useChatChannelSync(query.data?.conversation.id, queryKeys.chat.mine);
+  const conversationId = query.data?.conversation.id;
+
+  React.useEffect(() => {
+    if (!conversationId) return;
+
+    const echo = getEcho();
+    if (!echo) return;
+
+    const channel = echo.private(`conversation.${conversationId}`);
+    channel.listen(".message.sent", (payload: { message: ChatMessage }) => {
+      queryClient.setQueryData(queryKeys.chat.mine, (old: ThreadData | undefined) => {
+        if (!old || old.messages.some((m) => m.id === payload.message.id)) return old;
+
+        return {
+          ...old,
+          messages: [...old.messages, payload.message],
+          conversation: payload.message.is_admin
+            ? { ...old.conversation, customer_unread_count: old.conversation.customer_unread_count + 1 }
+            : old.conversation,
+        };
+      });
+    });
+
+    return () => {
+      echo.leave(`conversation.${conversationId}`);
+    };
+  }, [conversationId, queryClient]);
 
   return query;
 }
@@ -88,6 +115,19 @@ export function useSendChatMessage() {
     onSuccess: (message) => {
       queryClient.setQueryData(queryKeys.chat.mine, (old: ThreadData | undefined) =>
         appendMessageIfNew(old, message)
+      );
+    },
+  });
+}
+
+export function useMarkChatRead() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => customerChatService.markRead(),
+    onSuccess: () => {
+      queryClient.setQueryData(queryKeys.chat.mine, (old: ThreadData | undefined) =>
+        old ? { ...old, conversation: { ...old.conversation, customer_unread_count: 0 } } : old
       );
     },
   });

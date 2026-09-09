@@ -39,6 +39,7 @@ export const API_ENDPOINTS = {
     paymentMethods: "/customer/payment-methods",
     chat: "/customer/chat",
     chatMessages: "/customer/chat/messages",
+    chatRead: "/customer/chat/read",
   },
   admin: {
     contentImages: "/admin/content-images",
