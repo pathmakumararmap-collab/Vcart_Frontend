@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { adminChatService, customerChatService } from "@/lib/api/services/chat.service";
 import { queryKeys } from "@/lib/query-keys";
 import { getEcho } from "@/lib/echo";
+import { useAuthStore } from "@/store/auth-store";
 import type { ChatMessage } from "@/types/chat";
 
 type ThreadData = { conversation: { id: number }; messages: ChatMessage[] };
@@ -65,10 +66,13 @@ export function useAdminChatInboxChannel(onNewMessage: () => void) {
 // ── Customer ──────────────────────────────────────────────────────────
 
 export function useMyConversation() {
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+
   const query = useQuery({
     queryKey: queryKeys.chat.mine,
     queryFn: () => customerChatService.show(),
     staleTime: 30 * 1000,
+    enabled: isAuthenticated,
   });
 
   useChatChannelSync(query.data?.conversation.id, queryKeys.chat.mine);

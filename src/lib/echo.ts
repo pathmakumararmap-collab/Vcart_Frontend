@@ -26,14 +26,16 @@ export function getEcho(): Echo<"reverb"> | null {
   if (!echoInstance) {
     window.Pusher = Pusher;
 
+    const useTLS = (process.env.NEXT_PUBLIC_REVERB_SCHEME ?? "http") === "https";
+
     echoInstance = new Echo({
       broadcaster: "reverb",
       key: process.env.NEXT_PUBLIC_REVERB_APP_KEY,
       wsHost: process.env.NEXT_PUBLIC_REVERB_HOST,
       wsPort: Number(process.env.NEXT_PUBLIC_REVERB_PORT ?? 8080),
       wssPort: Number(process.env.NEXT_PUBLIC_REVERB_PORT ?? 8080),
-      forceTLS: (process.env.NEXT_PUBLIC_REVERB_SCHEME ?? "http") === "https",
-      enabledTransports: ["ws", "wss"],
+      forceTLS: useTLS,
+      enabledTransports: useTLS ? ["wss"] : ["ws"],
       authEndpoint: `${API_BASE_URL}/broadcasting/auth`,
       auth: {
         headers: {

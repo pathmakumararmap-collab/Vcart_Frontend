@@ -26,12 +26,10 @@ function MessageBubble({ message }: { message: ChatMessage }) {
   );
 }
 
-function ChatPanel({ onClose }: { onClose: () => void }) {
-  const { data, isLoading } = useMyConversation();
+function ChatPanel({ messages, isLoading, onClose }: { messages: ChatMessage[]; isLoading: boolean; onClose: () => void }) {
   const sendMessage = useSendChatMessage();
   const [draft, setDraft] = React.useState("");
   const scrollRef = React.useRef<HTMLDivElement>(null);
-  const messages = data?.messages ?? [];
 
   React.useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -114,22 +112,44 @@ export function ChatWidget() {
   const [open, setOpen] = React.useState(false);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
+  // Fetching + the real-time subscription live here, at the top of the
+  // widget, so they stay active for as long as the page is open — not
+  // just while the panel happens to be expanded. That's what lets a
+  // reply arrive (and the unread dot appear) while the bubble is closed.
+  const { data, isLoading } = useMyConversation();
+  const messages = React.useMemo(() => data?.messages ?? [], [data?.messages]);
+
+  const [seenCount, setSeenCount] = React.useState(0);
+  const hasUnread = !open && messages.length > seenCount;
+
+  React.useEffect(() => {
+    if (open) setSeenCount(messages.length);
+  }, [open, messages.length]);
+
+  function handleOpen() {
+    setOpen(true);
+    setSeenCount(messages.length);
+  }
+
   return (
     <div className="fixed right-4 bottom-4 z-50 sm:right-6 sm:bottom-6">
       {open ? (
         isAuthenticated ? (
-          <ChatPanel onClose={() => setOpen(false)} />
+          <ChatPanel messages={messages} isLoading={isLoading} onClose={() => setOpen(false)} />
         ) : (
           <LoggedOutPanel onClose={() => setOpen(false)} />
         )
       ) : (
         <button
           type="button"
-          onClick={() => setOpen(true)}
-          className="bg-primary text-primary-foreground shadow-luxury-lg hover-lift-sm flex size-14 items-center justify-center rounded-full"
+          onClick={handleOpen}
+          className="bg-primary text-primary-foreground shadow-luxury-lg hover-lift-sm relative flex size-14 items-center justify-center rounded-full"
           aria-label="Open chat"
         >
           <MessageCircle className="size-6" />
+          {hasUnread && (
+            <span className="absolute top-0 right-0 size-3.5 rounded-full bg-red-500 ring-2 ring-white" />
+          )}
         </button>
       )}
     </div>
