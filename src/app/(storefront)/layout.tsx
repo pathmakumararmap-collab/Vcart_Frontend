@@ -2,6 +2,7 @@ import type * as React from "react";
 
 import { SiteHeader } from "@/components/storefront/site-header";
 import { SiteFooter } from "@/components/storefront/site-footer";
+import { ChatWidget } from "@/components/storefront/chat-widget";
 
 export default function StorefrontLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -9,6 +10,7 @@ export default function StorefrontLayout({ children }: { children: React.ReactNo
       <SiteHeader />
       <main className="flex-1">{children}</main>
       <SiteFooter />
+      <ChatWidget />
     </>
   );
 }

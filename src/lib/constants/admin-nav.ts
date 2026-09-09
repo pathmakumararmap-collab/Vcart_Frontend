@@ -10,6 +10,7 @@ import {
   KeyRound,
   LayoutGrid,
   Megaphone,
+  MessageCircle,
   Package,
   PackageSearch,
   Percent,
@@ -56,6 +57,7 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
       { href: "/admin/orders", label: "Orders", icon: ShoppingCart, permission: "orders.view" },
       { href: "/admin/invoices", label: "Invoices", icon: Receipt, permission: "orders.view" },
       { href: "/admin/customers", label: "Customers", icon: Contact, permission: "users.view" },
+      { href: "/admin/chat", label: "Chat", icon: MessageCircle, permission: "chat.manage" },
     ],
   },
   {
