@@ -108,6 +108,8 @@ export function useAdminConversationMessages(conversationId: number | undefined)
     queryKey: queryKeys.chat.adminMessages(conversationId ?? 0),
     queryFn: () => adminChatService.messages(conversationId as number),
     enabled: !!conversationId,
+    staleTime: 0,
+    refetchOnMount: "always",
   });
 
   useChatChannelSync(conversationId, queryKeys.chat.adminMessages(conversationId ?? 0));
