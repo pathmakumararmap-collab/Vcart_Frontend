@@ -16,6 +16,7 @@ import {
   Smartphone,
   Sofa,
   Sparkles,
+  Van,
 } from "lucide-react";
 
 import { useCategories } from "@/hooks/use-products";
@@ -33,6 +34,7 @@ const CATEGORY_ICON_RULES: { match: RegExp; icon: React.ComponentType<{ classNam
   { match: /grocery|groceries|food|essential/i, icon: ShoppingCart },
   { match: /baby|kid|toy/i, icon: Baby },
   { match: /snack|beverage/i, icon: Popcorn },
+  { match: /atuto|parts/i, icon: Van },
 ];
 
 export function iconForCategory(name: string) {
