@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
@@ -21,10 +21,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Link } from "@/i18n/navigation";
 import { useRegister } from "@/hooks/use-auth";
 import { registerSchema, type RegisterFormValues } from "@/lib/validators/auth";
 
 export function RegisterForm() {
+  const t = useTranslations("Auth");
   const register = useRegister();
 
   const form = useForm<RegisterFormValues>({
@@ -39,8 +41,8 @@ export function RegisterForm() {
   return (
     <Card className="glass-panel shadow-luxury-lg">
       <CardHeader>
-        <CardTitle className="text-display text-xl">Create your account</CardTitle>
-        <CardDescription>Join Royal SL to start shopping</CardDescription>
+        <CardTitle className="text-display text-xl">{t("createAccountHeading")}</CardTitle>
+        <CardDescription>{t("registerSubtitle")}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -50,9 +52,9 @@ export function RegisterForm() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Full name</FormLabel>
+                  <FormLabel>{t("fullName")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Jane Doe" autoComplete="name" {...field} />
+                    <Input placeholder={t("fullNamePlaceholder")} autoComplete="name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -63,9 +65,9 @@ export function RegisterForm() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t("email")}</FormLabel>
                   <FormControl>
-                    <Input type="email" placeholder="you@example.com" autoComplete="email" {...field} />
+                    <Input type="email" placeholder={t("emailPlaceholder")} autoComplete="email" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -76,7 +78,7 @@ export function RegisterForm() {
               name="phone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Phone (optional)</FormLabel>
+                  <FormLabel>{t("phoneOptional")}</FormLabel>
                   <FormControl>
                     <Input type="tel" placeholder="077 123 4567" autoComplete="tel" {...field} />
                   </FormControl>
@@ -89,11 +91,11 @@ export function RegisterForm() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>{t("password")}</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
-                      placeholder="At least 8 characters"
+                      placeholder={t("passwordPlaceholder")}
                       autoComplete="new-password"
                       {...field}
                     />
@@ -107,11 +109,11 @@ export function RegisterForm() {
               name="password_confirmation"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Confirm password</FormLabel>
+                  <FormLabel>{t("confirmPassword")}</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
-                      placeholder="Re-enter your password"
+                      placeholder={t("confirmPasswordPlaceholder")}
                       autoComplete="new-password"
                       {...field}
                     />
@@ -121,14 +123,14 @@ export function RegisterForm() {
               )}
             />
             <Button type="submit" variant="gradient" className="w-full" disabled={register.isPending}>
-              {register.isPending ? "Creating account…" : "Create account"}
+              {register.isPending ? t("creatingAccount") : t("createAccountButton")}
             </Button>
           </form>
         </Form>
         <p className="text-muted-foreground mt-6 text-center text-sm">
-          Already have an account?{" "}
+          {t("alreadyHaveAccount")}{" "}
           <Link href="/login" className="text-primary font-medium hover:underline">
-            Log in
+            {t("logIn")}
           </Link>
         </p>
       </CardContent>

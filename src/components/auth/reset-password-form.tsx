@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
@@ -22,10 +22,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Link } from "@/i18n/navigation";
 import { useResetPassword } from "@/hooks/use-auth";
 import { resetPasswordSchema, type ResetPasswordFormValues } from "@/lib/validators/auth";
 
 export function ResetPasswordForm() {
+  const t = useTranslations("Auth");
   const searchParams = useSearchParams();
   const token = searchParams.get("token") ?? "";
   const email = searchParams.get("email") ?? "";
@@ -44,14 +46,12 @@ export function ResetPasswordForm() {
     return (
       <Card className="glass-panel shadow-luxury-lg">
         <CardHeader>
-          <CardTitle className="text-display text-xl">Invalid reset link</CardTitle>
-          <CardDescription>
-            This password reset link is missing or malformed. Request a new one below.
-          </CardDescription>
+          <CardTitle className="text-display text-xl">{t("invalidResetLink")}</CardTitle>
+          <CardDescription>{t("invalidResetLinkDescription")}</CardDescription>
         </CardHeader>
         <CardContent>
           <Button variant="gradient" className="w-full" asChild>
-            <Link href="/forgot-password">Request a new link</Link>
+            <Link href="/forgot-password">{t("requestNewLink")}</Link>
           </Button>
         </CardContent>
       </Card>
@@ -61,8 +61,8 @@ export function ResetPasswordForm() {
   return (
     <Card className="glass-panel shadow-luxury-lg">
       <CardHeader>
-        <CardTitle className="text-display text-xl">Set a new password</CardTitle>
-        <CardDescription>Choose a new password for {email}.</CardDescription>
+        <CardTitle className="text-display text-xl">{t("setNewPassword")}</CardTitle>
+        <CardDescription>{t("chooseNewPasswordFor", { email })}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -72,7 +72,7 @@ export function ResetPasswordForm() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>New password</FormLabel>
+                  <FormLabel>{t("newPassword")}</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
@@ -90,7 +90,7 @@ export function ResetPasswordForm() {
               name="password_confirmation"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Confirm new password</FormLabel>
+                  <FormLabel>{t("confirmNewPassword")}</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
@@ -109,7 +109,7 @@ export function ResetPasswordForm() {
               className="w-full"
               disabled={resetPassword.isPending}
             >
-              {resetPassword.isPending ? "Resetting…" : "Reset password"}
+              {resetPassword.isPending ? t("resetting") : t("resetPasswordButton")}
             </Button>
           </form>
         </Form>

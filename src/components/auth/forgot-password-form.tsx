@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { MailCheck } from "lucide-react";
@@ -23,10 +23,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Link } from "@/i18n/navigation";
 import { useForgotPassword } from "@/hooks/use-auth";
 import { forgotPasswordSchema, type ForgotPasswordFormValues } from "@/lib/validators/auth";
 
 export function ForgotPasswordForm() {
+  const t = useTranslations("Auth");
   const forgotPassword = useForgotPassword();
   const [sent, setSent] = React.useState(false);
 
@@ -46,16 +48,13 @@ export function ForgotPasswordForm() {
           <div className="bg-primary/10 text-primary flex size-10 items-center justify-center rounded-full">
             <MailCheck className="size-5" />
           </div>
-          <CardTitle className="text-display mt-3 text-xl">Check your email</CardTitle>
-          <CardDescription>
-            If an account exists for that email, we&apos;ve sent a link to reset your password.
-            The link expires shortly, so use it soon.
-          </CardDescription>
+          <CardTitle className="text-display mt-3 text-xl">{t("checkYourEmail")}</CardTitle>
+          <CardDescription>{t("resetLinkSentDescription")}</CardDescription>
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground text-center text-sm">
             <Link href="/login" className="text-primary font-medium hover:underline">
-              Back to log in
+              {t("backToLogin")}
             </Link>
           </p>
         </CardContent>
@@ -66,10 +65,8 @@ export function ForgotPasswordForm() {
   return (
     <Card className="glass-panel shadow-luxury-lg">
       <CardHeader>
-        <CardTitle className="text-display text-xl">Forgot your password?</CardTitle>
-        <CardDescription>
-          Enter the email on your account and we&apos;ll send you a link to reset it.
-        </CardDescription>
+        <CardTitle className="text-display text-xl">{t("forgotPasswordHeading")}</CardTitle>
+        <CardDescription>{t("forgotPasswordSubtitle")}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -79,9 +76,9 @@ export function ForgotPasswordForm() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t("email")}</FormLabel>
                   <FormControl>
-                    <Input type="email" placeholder="you@example.com" autoComplete="email" {...field} />
+                    <Input type="email" placeholder={t("emailPlaceholder")} autoComplete="email" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -93,14 +90,14 @@ export function ForgotPasswordForm() {
               className="w-full"
               disabled={forgotPassword.isPending}
             >
-              {forgotPassword.isPending ? "Sending…" : "Send reset link"}
+              {forgotPassword.isPending ? t("sending") : t("sendResetLink")}
             </Button>
           </form>
         </Form>
         <p className="text-muted-foreground mt-6 text-center text-sm">
-          Remembered your password?{" "}
+          {t("rememberedPassword")}{" "}
           <Link href="/login" className="text-primary font-medium hover:underline">
-            Log in
+            {t("logIn")}
           </Link>
         </p>
       </CardContent>

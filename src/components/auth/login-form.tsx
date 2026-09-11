@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
@@ -22,10 +22,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Link } from "@/i18n/navigation";
 import { useLogin } from "@/hooks/use-auth";
 import { loginSchema, type LoginFormValues } from "@/lib/validators/auth";
 
 export function LoginForm() {
+  const t = useTranslations("Auth");
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") ?? undefined;
   const login = useLogin(redirect);
@@ -42,8 +44,8 @@ export function LoginForm() {
   return (
     <Card className="glass-panel shadow-luxury-lg">
       <CardHeader>
-        <CardTitle className="text-display text-xl">Welcome back</CardTitle>
-        <CardDescription>Log in to your Royal SL account</CardDescription>
+        <CardTitle className="text-display text-xl">{t("welcomeBack")}</CardTitle>
+        <CardDescription>{t("loginSubtitle")}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -53,9 +55,9 @@ export function LoginForm() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t("email")}</FormLabel>
                   <FormControl>
-                    <Input type="email" placeholder="you@example.com" autoComplete="email" {...field} />
+                    <Input type="email" placeholder={t("emailPlaceholder")} autoComplete="email" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -67,12 +69,12 @@ export function LoginForm() {
               render={({ field }) => (
                 <FormItem>
                   <div className="flex items-center justify-between">
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>{t("password")}</FormLabel>
                     <Link
                       href="/forgot-password"
                       className="text-primary text-sm font-medium hover:underline"
                     >
-                      Forgot password?
+                      {t("forgotPassword")}
                     </Link>
                   </div>
                   <FormControl>
@@ -88,14 +90,14 @@ export function LoginForm() {
               )}
             />
             <Button type="submit" variant="gradient" className="w-full" disabled={login.isPending}>
-              {login.isPending ? "Logging in…" : "Log in"}
+              {login.isPending ? t("loggingIn") : t("logIn")}
             </Button>
           </form>
         </Form>
         <p className="text-muted-foreground mt-6 text-center text-sm">
-          Don&apos;t have an account?{" "}
+          {t("noAccount")}{" "}
           <Link href="/register" className="text-primary font-medium hover:underline">
-            Sign up
+            {t("signUp")}
           </Link>
         </p>
       </CardContent>
