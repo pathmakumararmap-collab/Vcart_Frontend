@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { ArrowRight } from "lucide-react";
 
 import { HeroSection } from "@/components/storefront/hero-section";
@@ -13,9 +13,12 @@ import { DesktopCategorySection } from "@/components/storefront/desktop-category
 import { ProductGrid } from "@/components/storefront/product-grid";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Link } from "@/i18n/navigation";
 import { useCategories, useProducts } from "@/hooks/use-products";
 
 export function LandingContent() {
+  const t = useTranslations("Home");
+  const tCommon = useTranslations("Common");
   const { data: categories, isLoading: categoriesLoading } = useCategories();
   const { data: featured, isLoading: featuredLoading } = useProducts({
     is_featured: true,
@@ -40,15 +43,15 @@ export function LandingContent() {
         <section className="container-page pt-4 pb-14 sm:pt-6 sm:pb-16">
           <div className="mb-6 flex items-end justify-between gap-4 sm:mb-8">
             <div className="space-y-1.5">
-              <p className="text-eyebrow text-primary hidden sm:block">Explore</p>
-              <h2 className="text-display text-2xl sm:text-3xl">Shop by category</h2>
+              <p className="text-eyebrow text-primary hidden sm:block">{t("explore")}</p>
+              <h2 className="text-display text-2xl sm:text-3xl">{t("shopByCategory")}</h2>
               <p className="text-muted-foreground hidden text-sm sm:block">
-                Explore our popular collections.
+                {t("exploreCollections")}
               </p>
             </div>
             <Button variant="ghost" size="sm" asChild>
               <Link href="/categories">
-                View all
+                {tCommon("viewAll")}
                 <ArrowRight className="size-3.5" />
               </Link>
             </Button>
@@ -95,12 +98,12 @@ export function LandingContent() {
         <section className="container-page border-t border-border/60 py-14 sm:py-16">
           <div className="mb-8 flex items-end justify-between gap-4">
             <div className="space-y-1.5">
-              <p className="text-eyebrow text-primary">Curated</p>
-              <h2 className="text-display text-2xl sm:text-3xl">Featured products</h2>
+              <p className="text-eyebrow text-primary">{t("curated")}</p>
+              <h2 className="text-display text-2xl sm:text-3xl">{t("featuredProducts")}</h2>
             </div>
             <Button variant="ghost" size="sm" asChild>
               <Link href="/products?featured=1">
-                View all
+                {tCommon("viewAll")}
                 <ArrowRight className="size-3.5" />
               </Link>
             </Button>
@@ -111,12 +114,12 @@ export function LandingContent() {
         <section className="container-page border-t border-border/60 py-14 sm:py-16">
           <div className="mb-8 flex items-end justify-between gap-4">
             <div className="space-y-1.5">
-              <p className="text-eyebrow text-primary">Just in</p>
-              <h2 className="text-display text-2xl sm:text-3xl">New arrivals</h2>
+              <p className="text-eyebrow text-primary">{t("justIn")}</p>
+              <h2 className="text-display text-2xl sm:text-3xl">{t("newArrivals")}</h2>
             </div>
             <Button variant="ghost" size="sm" asChild>
               <Link href="/products">
-                View all
+                {tCommon("viewAll")}
                 <ArrowRight className="size-3.5" />
               </Link>
             </Button>

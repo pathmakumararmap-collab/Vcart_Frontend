@@ -1,40 +1,43 @@
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Mail, MapPin, Phone } from "lucide-react";
 
 import { Logo } from "@/components/shared/logo";
 import { siteConfig } from "@/lib/constants/site";
 import { FacebookIcon, InstagramIcon, XIcon } from "@/components/icons/social-icons";
 import { Separator } from "@/components/ui/separator";
-
-const FOOTER_LINKS = [
-  {
-    title: "Shop",
-    links: [
-      { href: "/products", label: "All Products" },
-      { href: "/categories", label: "Categories" },
-      { href: "/search", label: "Search" },
-      { href: "/wishlist", label: "Wishlist" },
-    ],
-  },
-  {
-    title: "Account",
-    links: [
-      { href: "/dashboard", label: "Dashboard" },
-      { href: "/dashboard/orders", label: "My Orders" },
-      { href: "/dashboard/addresses", label: "Addresses" },
-      { href: "/dashboard/coupons", label: "Coupons" },
-    ],
-  },
-  {
-    title: "Company",
-    links: [
-      { href: "/login", label: "Sign in" },
-      { href: "/register", label: "Create account" },
-    ],
-  },
-];
+import { Link } from "@/i18n/navigation";
 
 export function SiteFooter() {
+  const t = useTranslations("Footer");
+
+  const FOOTER_LINKS = [
+    {
+      title: t("shop"),
+      links: [
+        { href: "/products", label: t("allProducts") },
+        { href: "/categories", label: t("categories") },
+        { href: "/search", label: t("search") },
+        { href: "/wishlist", label: t("wishlist") },
+      ],
+    },
+    {
+      title: t("account"),
+      links: [
+        { href: "/dashboard", label: t("dashboard") },
+        { href: "/dashboard/orders", label: t("myOrders") },
+        { href: "/dashboard/addresses", label: t("addresses") },
+        { href: "/dashboard/coupons", label: t("coupons") },
+      ],
+    },
+    {
+      title: t("company"),
+      links: [
+        { href: "/login", label: t("signIn") },
+        { href: "/register", label: t("createAccount") },
+      ],
+    },
+  ];
+
   return (
     <footer className="bg-muted/30 border-t border-border/60">
       <div className="container-page grid gap-12 py-16 md:grid-cols-[1.5fr_1fr_1fr_1fr] md:gap-10">
@@ -87,7 +90,7 @@ export function SiteFooter() {
         ))}
 
         <div className="space-y-4">
-          <h4 className="text-eyebrow text-muted-foreground">Contact</h4>
+          <h4 className="text-eyebrow text-muted-foreground">{t("contact")}</h4>
           <ul className="text-muted-foreground space-y-2.5 text-sm">
             <li className="flex items-start gap-2.5">
               <MapPin className="text-primary mt-0.5 size-4 shrink-0" />
@@ -107,9 +110,9 @@ export function SiteFooter() {
       <Separator className="bg-border/60" />
       <div className="container-page flex flex-col items-center justify-between gap-2 py-7 text-xs sm:flex-row">
         <p className="text-muted-foreground">
-          © {new Date().getFullYear()} {siteConfig.fullName}. All rights reserved.
+          © {new Date().getFullYear()} {siteConfig.fullName}. {t("allRightsReserved")}
         </p>
-        <p className="text-muted-foreground">Made By S.R Wijepura</p>
+        <p className="text-muted-foreground">{t("madeBy")}</p>
       </div>
     </footer>
   );

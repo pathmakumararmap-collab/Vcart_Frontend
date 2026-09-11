@@ -1,7 +1,8 @@
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
 import { iconForCategory } from "@/components/storefront/hero-section";
+import { Link } from "@/i18n/navigation";
 import type { Category } from "@/types/catalog";
 
 // Cycled by index — gives each category card a distinct pastel accent,
@@ -87,6 +88,7 @@ function PromoBanner({
 }
 
 export function DesktopCategorySection({ categories }: { categories: Category[] }) {
+  const t = useTranslations("Home");
   return (
     <div className="hidden space-y-4 md:block">
       <div className="grid grid-cols-4 gap-4 lg:grid-cols-8">
@@ -99,31 +101,31 @@ export function DesktopCategorySection({ categories }: { categories: Category[] 
           match your own current offers. */}
       <div className="flex flex-col gap-4 lg:flex-row">
         <PromoBanner
-          eyebrow="Flash offer"
+          eyebrow={t("flashOfferEyebrow")}
           heading={
             <>
-              Up to 50% Off
+              {t("mobilesPromoHeading1")}
               <br />
-              All Mobiles
+              {t("mobilesPromoHeading2")}
             </>
           }
-          subtitle="Valid until midnight today. Shop the best deals."
-          buttonLabel="Shop Mobiles"
+          subtitle={t("mobilesPromoSubtitle")}
+          buttonLabel={t("shopMobiles")}
           href="/products?category=mobiles"
           variant="navy"
           icon={iconForCategory("Mobiles")}
         />
         <PromoBanner
-          eyebrow="New season"
+          eyebrow={t("newSeasonEyebrow")}
           heading={
             <>
-              Fashion from
+              {t("fashionPromoHeading1")}
               <br />
-              Rs. 999 Onwards
+              {t("fashionPromoHeading2")}
             </>
           }
-          subtitle="Trending styles for men, women & kids."
-          buttonLabel="Explore Fashion"
+          subtitle={t("fashionPromoSubtitle")}
+          buttonLabel={t("exploreFashion")}
           href="/products?category=fashion"
           variant="teal"
           icon={iconForCategory("Fashion")}

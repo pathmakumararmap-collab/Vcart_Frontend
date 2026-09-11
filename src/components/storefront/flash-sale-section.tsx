@@ -2,12 +2,13 @@
 
 import * as React from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { ArrowRight, Flame } from "lucide-react";
 
 import { Currency } from "@/components/shared/currency";
 import { StarRating } from "@/components/shared/star-rating";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Link } from "@/i18n/navigation";
 import { useFlashSale } from "@/hooks/use-products";
 import { cn } from "@/lib/utils";
 import type { FlashSaleProduct } from "@/types/catalog";
@@ -99,6 +100,8 @@ function FlashSaleCard({ product }: { product: FlashSaleProduct }) {
 }
 
 export function FlashSaleSection() {
+  const t = useTranslations("Home");
+  const tCommon = useTranslations("Common");
   const { data, isLoading } = useFlashSale();
   const remainingMs = useCountdown(data?.ends_at ?? null);
 
@@ -117,7 +120,7 @@ export function FlashSaleSection() {
           <div className="mb-6 flex flex-wrap items-center justify-between gap-4 sm:mb-8">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
-                <h2 className="text-display text-2xl tracking-tight sm:text-3xl">FLASH SALE</h2>
+                <h2 className="text-display text-2xl tracking-tight sm:text-3xl">{t("flashSale")}</h2>
                 <Flame className="size-6 fill-orange-500 text-orange-500 sm:size-7" />
               </div>
 
@@ -125,9 +128,9 @@ export function FlashSaleSection() {
                 <div className="flex items-center gap-1.5">
                   {(
                     [
-                      ["HOURS", countdown.hours],
-                      ["MINUTES", countdown.minutes],
-                      ["SECONDS", countdown.seconds],
+                      [t("hours"), countdown.hours],
+                      [t("minutes"), countdown.minutes],
+                      [t("seconds"), countdown.seconds],
                     ] as const
                   ).map(([label, value], index) => (
                     <React.Fragment key={label}>
@@ -150,7 +153,7 @@ export function FlashSaleSection() {
               href="/products?sort=latest"
               className="text-muted-foreground hover:text-foreground flex shrink-0 items-center gap-1 text-sm font-medium transition-colors"
             >
-              View all
+              {tCommon("viewAll")}
               <ArrowRight className="size-3.5" />
             </Link>
           </div>

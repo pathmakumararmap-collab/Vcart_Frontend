@@ -1,8 +1,7 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Heart, Search, ShoppingCart } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -10,20 +9,17 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Logo } from "@/components/shared/logo";
 import { UserNav } from "@/components/shared/user-nav";
+import { LanguageSwitcher } from "@/components/shared/language-switcher";
 import { MobileNav } from "@/components/storefront/mobile-nav";
 import { CartSheet } from "@/components/storefront/cart-sheet";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/hooks/use-cart";
 import { useWishlist } from "@/hooks/use-wishlist";
 import { useUiStore } from "@/store/ui-store";
 
-const NAV_LINKS = [
-  { href: "/", label: "Home" },
-  { href: "/categories", label: "Categories" },
-  { href: "/products", label: "All Products" },
-];
-
 export function SiteHeader() {
+  const t = useTranslations("Nav");
   const pathname = usePathname();
   const router = useRouter();
   const [query, setQuery] = React.useState("");
@@ -32,6 +28,12 @@ export function SiteHeader() {
   const { data: cart } = useCart();
   const { count: wishlistCount } = useWishlist();
   const setCartOpen = useUiStore((state) => state.setCartOpen);
+
+  const NAV_LINKS = [
+    { href: "/", label: t("home") },
+    { href: "/categories", label: t("categories") },
+    { href: "/products", label: t("allProducts") },
+  ];
 
   const cartCount = cart?.items?.reduce((sum, item) => sum + item.quantity, 0) ?? 0;
   const isHomepage = pathname === "/";
@@ -103,12 +105,12 @@ export function SiteHeader() {
             <Input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search products…"
+              placeholder={t("searchPlaceholder")}
               className="rounded-md pr-11 pl-9"
             />
             <button
               type="submit"
-              aria-label="Search"
+              aria-label={t("searchPlaceholder")}
               className="absolute top-1/2 right-1 flex size-8 -translate-y-1/2 items-center justify-center rounded-md bg-[#FB6C00] text-white transition-opacity hover:opacity-90"
             >
               <Search className="size-4" />
@@ -117,8 +119,10 @@ export function SiteHeader() {
         </form>
 
         <div className="ml-auto flex items-center gap-0.5 md:ml-0">
+          <LanguageSwitcher />
+
           <Button variant="ghost" size="icon" className="relative" asChild>
-            <Link href="/wishlist" aria-label="Wishlist">
+            <Link href="/wishlist" aria-label={t("wishlist")}>
               <Heart className="size-5" />
               {wishlistCount > 0 && (
                 <Badge className="bg-gradient-gold text-accent-foreground absolute -top-1 -right-1 h-4.5 min-w-4.5 justify-center rounded-full border-0 px-1 text-[10px] shadow-sm">
@@ -133,7 +137,7 @@ export function SiteHeader() {
             size="icon"
             className="relative"
             onClick={() => setCartOpen(true)}
-            aria-label="Cart"
+            aria-label={t("cart")}
           >
             <ShoppingCart className="size-5" />
             {cartCount > 0 && (
@@ -157,14 +161,14 @@ export function SiteHeader() {
             <Input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search products…"
+              placeholder={t("searchPlaceholder")}
               className="rounded-full border-1 border-[#FB6C00] bg-white pr-[4.75rem] pl-9 text-sm font-normal placeholder:text-xs placeholder:font-normal"
             />
             <button
               type="submit"
               className="absolute top-1/2 right-1.25 h-7.25 -translate-y-1/2 rounded-full bg-[#FB6C00] px-3.5 text-xs font-semibold text-white transition-opacity hover:opacity-90"
             >
-              Search
+              <Search className="size-3.5" />
             </button>
           </div>
         </form>

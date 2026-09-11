@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 
+import { Link } from "@/i18n/navigation";
 import { useBrands } from "@/hooks/use-products";
 import type { Brand } from "@/types/catalog";
 
@@ -29,6 +30,7 @@ function BrandChip({ brand }: { brand: Brand }) {
 }
 
 export function BrandMarqueeSection() {
+  const t = useTranslations("Home");
   const { data: brands, isLoading } = useBrands();
 
   if (!isLoading && (!brands || brands.length === 0)) return null;
@@ -39,7 +41,7 @@ export function BrandMarqueeSection() {
   return (
     <section className="py-10 sm:py-14">
       <div className="container-page mb-4 sm:mb-6">
-        <h2 className="text-display text-xl sm:text-2xl">Shop by brand</h2>
+        <h2 className="text-display text-xl sm:text-2xl">{t("shopByBrand")}</h2>
       </div>
 
       {isLoading ? (

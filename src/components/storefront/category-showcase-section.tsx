@@ -1,14 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { ArrowRight } from "lucide-react";
 
 import { Skeleton } from "@/components/ui/skeleton";
+import { Link } from "@/i18n/navigation";
 import { useCategories, useProducts } from "@/hooks/use-products";
 import type { Category } from "@/types/catalog";
 
 function CategoryShowcaseCard({ category }: { category: Category }) {
+  const t = useTranslations("Common");
   const { data, isLoading } = useProducts({ category_id: category.id, per_page: 4 });
   const products = data?.data ?? [];
 
@@ -45,7 +47,7 @@ function CategoryShowcaseCard({ category }: { category: Category }) {
         href={`/products?category=${category.id}`}
         className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-[#FB6C00] hover:underline"
       >
-        See more
+        {t("seeMore")}
         <ArrowRight className="size-3.5" />
       </Link>
     </div>
