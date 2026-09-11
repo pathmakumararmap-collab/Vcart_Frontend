@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { CreditCard, MapPin, Plus, ShoppingBag, Tag, Wallet } from "lucide-react";
@@ -21,12 +21,16 @@ import { EmptyState } from "@/components/shared/empty-state";
 import { LoadingSpinner } from "@/components/shared/loading-spinner";
 import { RequireAuth } from "@/components/shared/require-auth";
 import { AddressFormDialog } from "@/components/customer/address-form-dialog";
+import { Link } from "@/i18n/navigation";
 import { useCart } from "@/hooks/use-cart";
 import { useAddresses } from "@/hooks/use-addresses";
 import { useCheckout, useCheckoutPaymentMethods } from "@/hooks/use-orders";
 import { checkoutSchema, type CheckoutFormValues } from "@/lib/validators/checkout";
 
 function CheckoutForm() {
+  const t = useTranslations("Checkout");
+  const tCommon = useTranslations("Common");
+  const tCart = useTranslations("Cart");
   const router = useRouter();
   const { data: cart, isLoading: cartLoading } = useCart();
   const { data: addresses, isLoading: addressesLoading } = useAddresses();
@@ -72,11 +76,11 @@ function CheckoutForm() {
       <div className="container-page py-16">
         <EmptyState
           icon={ShoppingBag}
-          title="Your cart is empty"
-          description="Add some products to your cart before checking out."
+          title={tCart("empty")}
+          description={t("emptyDescription")}
           action={
             <Button asChild>
-              <Link href="/products">Browse products</Link>
+              <Link href="/products">{t("browseProducts")}</Link>
             </Button>
           }
         />
@@ -91,7 +95,7 @@ function CheckoutForm() {
   const onSubmit = (values: CheckoutFormValues) => {
     if (selectedPaymentMethod?.code === "online_gateway") {
       if (!cardNumber.trim() || !cardExpiry.trim() || !cardCvv.trim()) {
-        toast.error("Please fill in the card details to continue.");
+        toast.error(t("fillCardDetails"));
         return;
       }
     }
@@ -124,14 +128,14 @@ function CheckoutForm() {
         className="container-page grid gap-10 py-12 lg:grid-cols-[1fr_400px]"
       >
         <div className="space-y-6">
-          <h1 className="text-display text-2xl sm:text-3xl">Checkout</h1>
+          <h1 className="text-display text-2xl sm:text-3xl">{t("title")}</h1>
 
           <Card>
             <CardContent className="space-y-5">
               <div className="flex items-center justify-between">
                 <h2 className="flex items-center gap-2 font-semibold">
                   <MapPin className="text-primary size-4" />
-                  Shipping address
+                  {t("shippingAddress")}
                 </h2>
                 <Button
                   type="button"
@@ -140,14 +144,14 @@ function CheckoutForm() {
                   onClick={() => setAddressDialogOpen(true)}
                 >
                   <Plus className="size-3.5" />
-                  Add new
+                  {t("addNew")}
                 </Button>
               </div>
 
               {!addresses?.length ? (
                 <EmptyState
-                  title="No saved addresses"
-                  description="Add a shipping address to continue."
+                  title={t("noSavedAddresses")}
+                  description={t("addAddressDescription")}
                   className="border-none py-6"
                 />
               ) : (
@@ -197,13 +201,13 @@ function CheckoutForm() {
             <CardContent className="space-y-5">
               <h2 className="flex items-center gap-2 font-semibold">
                 <CreditCard className="text-primary size-4" />
-                Payment method
+                {t("paymentMethod")}
               </h2>
 
               {!paymentMethods?.length ? (
                 <EmptyState
-                  title="No payment methods available"
-                  description="Please contact support to complete your order."
+                  title={t("noPaymentMethods")}
+                  description={t("noPaymentMethodsDescription")}
                   className="border-none py-6"
                 />
               ) : (
@@ -245,12 +249,10 @@ function CheckoutForm() {
 
               {selectedPaymentMethod?.code === "online_gateway" && (
                 <div className="border-border/60 space-y-3 rounded-lg border p-4">
-                  <p className="text-muted-foreground text-xs">
-                    Demo payment form — no real card details are transmitted or stored.
-                  </p>
+                  <p className="text-muted-foreground text-xs">{t("demoPaymentNote")}</p>
                   <div className="grid gap-3 sm:grid-cols-2">
                     <div className="space-y-1.5 sm:col-span-2">
-                      <Label htmlFor="demo-card-number">Card number</Label>
+                      <Label htmlFor="demo-card-number">{t("cardNumber")}</Label>
                       <Input
                         id="demo-card-number"
                         placeholder="4242 4242 4242 4242"
@@ -259,7 +261,7 @@ function CheckoutForm() {
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <Label htmlFor="demo-card-expiry">Expiry</Label>
+                      <Label htmlFor="demo-card-expiry">{t("expiry")}</Label>
                       <Input
                         id="demo-card-expiry"
                         placeholder="MM/YY"
@@ -268,7 +270,7 @@ function CheckoutForm() {
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <Label htmlFor="demo-card-cvv">CVV</Label>
+                      <Label htmlFor="demo-card-cvv">{t("cvv")}</Label>
                       <Input
                         id="demo-card-cvv"
                         placeholder="123"
@@ -284,14 +286,14 @@ function CheckoutForm() {
 
           <Card>
             <CardContent className="space-y-5">
-              <h2 className="font-semibold">Order notes (optional)</h2>
+              <h2 className="font-semibold">{t("orderNotes")}</h2>
               <FormField
                 control={form.control}
                 name="notes"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Textarea placeholder="Delivery instructions, gift notes, etc." {...field} />
+                      <Textarea placeholder={t("notesPlaceholder")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -303,7 +305,7 @@ function CheckoutForm() {
 
         <Card className="h-fit">
           <CardContent className="space-y-5">
-            <h2 className="text-eyebrow text-muted-foreground">Order summary</h2>
+            <h2 className="text-eyebrow text-muted-foreground">{t("orderSummary")}</h2>
             <ul className="space-y-2.5 text-sm">
               {items.map((item) => (
                 <li key={item.id} className="flex justify-between gap-2">
@@ -324,10 +326,10 @@ function CheckoutForm() {
                 <FormItem>
                   <FormLabel className="text-xs">
                     <Tag className="size-3.5" />
-                    Coupon code
+                    {t("couponCode")}
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g. WELCOME10" {...field} />
+                    <Input placeholder={t("couponPlaceholder")} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -337,7 +339,7 @@ function CheckoutForm() {
             <Separator className="bg-border/60" />
 
             <div className="flex justify-between font-semibold">
-              <span>Subtotal</span>
+              <span>{tCommon("subtotal")}</span>
               <Currency value={cart?.total ?? 0} className="tabular-nums text-lg" />
             </div>
 
@@ -348,7 +350,7 @@ function CheckoutForm() {
               className="w-full"
               disabled={checkout.isPending || !addresses?.length || !paymentMethods?.length}
             >
-              {checkout.isPending ? "Placing order…" : "Place order"}
+              {checkout.isPending ? t("placingOrder") : tCommon("placeOrder")}
             </Button>
           </CardContent>
         </Card>

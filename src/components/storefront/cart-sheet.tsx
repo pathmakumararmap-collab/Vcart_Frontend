@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
 
 import {
@@ -16,10 +16,13 @@ import { Separator } from "@/components/ui/separator";
 import { EmptyState } from "@/components/shared/empty-state";
 import { Currency } from "@/components/shared/currency";
 import { LoadingSpinner } from "@/components/shared/loading-spinner";
+import { Link } from "@/i18n/navigation";
 import { useCart, useRemoveCartItem, useUpdateCartItem } from "@/hooks/use-cart";
 import { useUiStore } from "@/store/ui-store";
 
 export function CartSheet() {
+  const t = useTranslations("Cart");
+  const tCommon = useTranslations("Common");
   const isOpen = useUiStore((state) => state.isCartOpen);
   const setOpen = useUiStore((state) => state.setCartOpen);
   const { data: cart, isLoading } = useCart();
@@ -32,7 +35,9 @@ export function CartSheet() {
     <Sheet open={isOpen} onOpenChange={setOpen}>
       <SheetContent className="flex w-full flex-col sm:max-w-md">
         <SheetHeader>
-          <SheetTitle>Your cart {items.length > 0 && `(${items.length})`}</SheetTitle>
+          <SheetTitle>
+            {t("yourCart")} {items.length > 0 && `(${items.length})`}
+          </SheetTitle>
         </SheetHeader>
 
         <div className="flex-1 overflow-y-auto px-4">
@@ -41,12 +46,12 @@ export function CartSheet() {
           ) : items.length === 0 ? (
             <EmptyState
               icon={ShoppingBag}
-              title="Your cart is empty"
-              description="Browse our catalog and add items you love."
+              title={t("empty")}
+              description={t("emptyDescriptionSheet")}
               className="mt-8 border-none"
               action={
                 <Button asChild size="sm" onClick={() => setOpen(false)}>
-                  <Link href="/products">Start shopping</Link>
+                  <Link href="/products">{t("startShopping")}</Link>
                 </Button>
               }
             />
@@ -83,7 +88,7 @@ export function CartSheet() {
                         className="text-muted-foreground shrink-0"
                         onClick={() => removeItem.mutate(item.id)}
                         disabled={removeItem.isPending}
-                        aria-label="Remove item"
+                        aria-label={t("removeItem")}
                       >
                         <Trash2 className="size-3.5" />
                       </Button>
@@ -129,15 +134,15 @@ export function CartSheet() {
         {items.length > 0 && (
           <SheetFooter className="border-t border-border/60">
             <div className="flex items-center justify-between py-2 text-sm font-medium">
-              <span>Subtotal</span>
+              <span>{tCommon("subtotal")}</span>
               <Currency value={cart?.total ?? 0} className="tabular-nums text-base" />
             </div>
             <Separator className="mb-2 bg-border/60" />
             <Button asChild size="lg" variant="gradient" onClick={() => setOpen(false)}>
-              <Link href="/checkout">Checkout</Link>
+              <Link href="/checkout">{tCommon("checkout")}</Link>
             </Button>
             <Button variant="ghost" asChild onClick={() => setOpen(false)}>
-              <Link href="/cart">View cart</Link>
+              <Link href="/cart">{t("viewCart")}</Link>
             </Button>
           </SheetFooter>
         )}

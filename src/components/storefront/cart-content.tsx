@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { Currency } from "@/components/shared/currency";
 import { EmptyState } from "@/components/shared/empty-state";
 import { LoadingSpinner } from "@/components/shared/loading-spinner";
+import { Link } from "@/i18n/navigation";
 import {
   useCart,
   useClearCart,
@@ -18,6 +19,8 @@ import {
 } from "@/hooks/use-cart";
 
 export function CartContent() {
+  const t = useTranslations("Cart");
+  const tCommon = useTranslations("Common");
   const { data: cart, isLoading } = useCart();
   const updateItem = useUpdateCartItem();
   const removeItem = useRemoveCartItem();
@@ -34,11 +37,11 @@ export function CartContent() {
       <div className="container-page py-16">
         <EmptyState
           icon={ShoppingBag}
-          title="Your cart is empty"
-          description="Looks like you haven't added anything yet. Start exploring our catalog."
+          title={t("empty")}
+          description={t("emptyDescriptionPage")}
           action={
             <Button asChild>
-              <Link href="/products">Start shopping</Link>
+              <Link href="/products">{t("startShopping")}</Link>
             </Button>
           }
         />
@@ -50,14 +53,14 @@ export function CartContent() {
     <div className="container-page grid gap-10 py-12 lg:grid-cols-[1fr_380px]">
       <div className="space-y-5">
         <div className="flex items-center justify-between">
-          <h1 className="text-display text-2xl sm:text-3xl">Shopping cart</h1>
+          <h1 className="text-display text-2xl sm:text-3xl">{t("title")}</h1>
           <Button
             variant="ghost"
             size="sm"
             onClick={() => clearCart.mutate()}
             disabled={clearCart.isPending}
           >
-            Clear cart
+            {t("clearCart")}
           </Button>
         </div>
 
@@ -99,7 +102,7 @@ export function CartContent() {
                     size="icon-sm"
                     onClick={() => removeItem.mutate(item.id)}
                     disabled={removeItem.isPending}
-                    aria-label="Remove item"
+                    aria-label={t("removeItem")}
                   >
                     <Trash2 className="size-4" />
                   </Button>
@@ -138,24 +141,22 @@ export function CartContent() {
 
       <Card className="h-fit">
         <CardContent className="space-y-4">
-          <h2 className="text-eyebrow text-muted-foreground">Order summary</h2>
+          <h2 className="text-eyebrow text-muted-foreground">{t("orderSummary")}</h2>
           <div className="text-muted-foreground flex justify-between text-sm">
-            <span>Subtotal</span>
+            <span>{tCommon("subtotal")}</span>
             <Currency value={cart?.total ?? 0} className="tabular-nums" />
           </div>
-          <p className="text-muted-foreground text-xs">
-            Shipping, tax, and coupon discounts are calculated at checkout.
-          </p>
+          <p className="text-muted-foreground text-xs">{t("shippingNote")}</p>
           <Separator className="bg-border/60" />
           <div className="flex justify-between font-semibold">
-            <span>Total</span>
+            <span>{tCommon("total")}</span>
             <Currency value={cart?.total ?? 0} className="tabular-nums text-lg" />
           </div>
           <Button asChild size="lg" variant="gradient" className="w-full">
-            <Link href="/checkout">Proceed to checkout</Link>
+            <Link href="/checkout">{t("proceedToCheckout")}</Link>
           </Button>
           <Button asChild variant="ghost" className="w-full">
-            <Link href="/products">Continue shopping</Link>
+            <Link href="/products">{tCommon("continueShopping")}</Link>
           </Button>
         </CardContent>
       </Card>

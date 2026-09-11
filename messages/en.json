@@ -77,5 +77,42 @@
     "fashionPromoHeading2": "Rs. 999 Onwards",
     "fashionPromoSubtitle": "Trending styles for men, women & kids.",
     "exploreFashion": "Explore Fashion"
+  },
+  "Cart": {
+    "title": "Shopping cart",
+    "yourCart": "Your cart",
+    "empty": "Your cart is empty",
+    "emptyDescriptionPage": "Looks like you haven't added anything yet. Start exploring our catalog.",
+    "emptyDescriptionSheet": "Browse our catalog and add items you love.",
+    "startShopping": "Start shopping",
+    "clearCart": "Clear cart",
+    "removeItem": "Remove item",
+    "orderSummary": "Order summary",
+    "shippingNote": "Shipping, tax, and coupon discounts are calculated at checkout.",
+    "proceedToCheckout": "Proceed to checkout",
+    "viewCart": "View cart"
+  },
+  "Checkout": {
+    "title": "Checkout",
+    "emptyDescription": "Add some products to your cart before checking out.",
+    "browseProducts": "Browse products",
+    "shippingAddress": "Shipping address",
+    "addNew": "Add new",
+    "noSavedAddresses": "No saved addresses",
+    "addAddressDescription": "Add a shipping address to continue.",
+    "paymentMethod": "Payment method",
+    "noPaymentMethods": "No payment methods available",
+    "noPaymentMethodsDescription": "Please contact support to complete your order.",
+    "demoPaymentNote": "Demo payment form — no real card details are transmitted or stored.",
+    "cardNumber": "Card number",
+    "expiry": "Expiry",
+    "cvv": "CVV",
+    "orderNotes": "Order notes (optional)",
+    "notesPlaceholder": "Delivery instructions, gift notes, etc.",
+    "orderSummary": "Order summary",
+    "couponCode": "Coupon code",
+    "couponPlaceholder": "e.g. WELCOME10",
+    "placingOrder": "Placing order…",
+    "fillCardDetails": "Please fill in the card details to continue."
   }
 }

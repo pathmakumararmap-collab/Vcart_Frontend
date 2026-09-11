@@ -77,5 +77,42 @@
     "fashionPromoHeading2": "රු. 999 සිට",
     "fashionPromoSubtitle": "පිරිමි, ගැහැණු සහ ළමා විලාසිතා.",
     "exploreFashion": "විලාසිතා බලන්න"
+  },
+  "Cart": {
+    "title": "සාප්පු කරත්තය",
+    "yourCart": "ඔබේ කරත්තය",
+    "empty": "ඔබේ කරත්තය හිස්ය",
+    "emptyDescriptionPage": "ඔබ තවම කිසිවක් එකතු කර නැති බව පෙනේ. අපගේ නිෂ්පාදන බැලීම ආරම්භ කරන්න.",
+    "emptyDescriptionSheet": "අපගේ නිෂ්පාදන බලා ඔබ කැමති අයිතම එකතු කරන්න.",
+    "startShopping": "සාප්පු සවාරි ආරම්භ කරන්න",
+    "clearCart": "කරත්තය හිස් කරන්න",
+    "removeItem": "අයිතමය ඉවත් කරන්න",
+    "orderSummary": "ඇණවුම් සාරාංශය",
+    "shippingNote": "ප්‍රවාහන ගාස්තු, බදු සහ වට්ටම් ගණනය කරන්නේ ගෙවීමේදීය.",
+    "proceedToCheckout": "ගෙවීමට යන්න",
+    "viewCart": "කරත්තය බලන්න"
+  },
+  "Checkout": {
+    "title": "ගෙවීම",
+    "emptyDescription": "ගෙවීමට කලින් ඔබේ කරත්තයට නිෂ්පාදන එකතු කරන්න.",
+    "browseProducts": "නිෂ්පාදන බලන්න",
+    "shippingAddress": "ප්‍රවාහන ලිපිනය",
+    "addNew": "අලුතින් එකතු කරන්න",
+    "noSavedAddresses": "සුරකින ලද ලිපින නැත",
+    "addAddressDescription": "ඉදිරියට යාමට ප්‍රවාහන ලිපිනයක් එකතු කරන්න.",
+    "paymentMethod": "ගෙවීමේ ක්‍රමය",
+    "noPaymentMethods": "ගෙවීමේ ක්‍රම නොමැත",
+    "noPaymentMethodsDescription": "ඔබේ ඇණවුම සම්පූර්ණ කිරීමට කරුණාකර සහාය අමතන්න.",
+    "demoPaymentNote": "නිදර්ශන ගෙවීම් පෝරමයකි — සැබෑ කාඩ්පත් විස්තර සම්ප්‍රේෂණය හෝ ගබඩා නොකෙරේ.",
+    "cardNumber": "කාඩ්පත් අංකය",
+    "expiry": "කල් ඉකුත් වීම",
+    "cvv": "CVV",
+    "orderNotes": "ඇණවුම් සටහන් (විකල්ප)",
+    "notesPlaceholder": "බෙදාහැරීමේ උපදෙස්, තෑගි සටහන් ආදිය.",
+    "orderSummary": "ඇණවුම් සාරාංශය",
+    "couponCode": "වට්ටම් කූපන් කේතය",
+    "couponPlaceholder": "උදා. WELCOME10",
+    "placingOrder": "ඇණවුම තබමින්…",
+    "fillCardDetails": "ඉදිරියට යාමට කාඩ්පත් විස්තර පුරවන්න."
   }
 }
