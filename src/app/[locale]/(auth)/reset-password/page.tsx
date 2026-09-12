@@ -5,7 +5,7 @@ import { ResetPasswordForm } from "@/components/auth/reset-password-form";
 
 export const metadata: Metadata = {
   title: "Reset password",
-  description: "Choose a new password for your Royal SL account.",
+  description: "Choose a new password for your Vcart account.",
   robots: { index: false, follow: false },
 };
 

@@ -4,7 +4,7 @@ import { RegisterForm } from "@/components/auth/register-form";
 
 export const metadata: Metadata = {
   title: "Create account",
-  description: "Create your Royal SL account.",
+  description: "Create your Vcart account.",
   robots: { index: false, follow: false },
 };
 

@@ -72,7 +72,7 @@ export function useRegister() {
     onSuccess: (data) => {
       setAuth(data.user, data.token);
       queryClient.setQueryData(queryKeys.auth.me, data.user);
-      toast.success("Account created! Welcome to Royal SL.");
+      toast.success("Account created! Welcome to Vcart.");
       router.push("/dashboard");
     },
     onError: (error: ApiError) => {

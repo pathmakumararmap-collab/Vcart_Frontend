@@ -113,7 +113,7 @@ export function SiteFooter() {
       <Separator className="bg-border/60" />
       <div className="container-page flex flex-col items-center justify-between gap-2 py-7 text-xs sm:flex-row">
         <p className="text-muted-foreground">
-          © {new Date().getFullYear()} {siteConfig.fullName}. {t("allRightsReserved")}
+          © {new Date().getFullYear()} {siteConfig.legalName}. {t("allRightsReserved")}
         </p>
         <p className="text-muted-foreground">{t("madeBy")}</p>
       </div>

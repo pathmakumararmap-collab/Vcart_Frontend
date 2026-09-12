@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   keywords: [
-    "Royal SL",
+    "Vcart",
     "Sri Lanka ecommerce",
     "online shopping Sri Lanka",
     "electronics",

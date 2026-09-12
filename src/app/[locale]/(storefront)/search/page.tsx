@@ -6,7 +6,7 @@ import { LoadingSpinner } from "@/components/shared/loading-spinner";
 
 export const metadata: Metadata = {
   title: "Search",
-  description: "Search the Royal SL product catalog.",
+  description: "Search the Vcart product catalog.",
   robots: { index: false, follow: true },
 };
 

@@ -7,7 +7,8 @@ export function PrivacyContent() {
   return (
     <LegalPageLayout title="Privacy Policy" lastUpdated="12 September 2026">
       <p>
-        This Privacy Policy explains how {siteConfig.fullName} (&quot;we&quot;, &quot;us&quot;,
+        This Privacy Policy explains how {siteConfig.legalName} (trading as {siteConfig.name})
+        (&quot;we&quot;, &quot;us&quot;,
         &quot;our&quot;) collects, uses, and protects your personal information when you use our
         website or place an order with us.
       </p>

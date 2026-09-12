@@ -8,15 +8,15 @@ export function TermsContent() {
     <LegalPageLayout title="Terms & Conditions" lastUpdated="12 September 2026">
       <p>
         These Terms &amp; Conditions (&quot;Terms&quot;) govern your use of the{" "}
-        {siteConfig.fullName} website (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;) and any
+        {siteConfig.name} website (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;) and any
         purchase you make through it. By accessing the site or placing an order, you agree to be
         bound by these Terms. If you do not agree, please do not use the site.
       </p>
 
       <h2>1. Who we are</h2>
       <p>
-        {siteConfig.fullName} is an online store based in Sri Lanka, operating at{" "}
-        {siteConfig.contact.address}. You can reach us at{" "}
+        {siteConfig.name} is an online store operated by {siteConfig.legalName}, a company
+        registered in Sri Lanka, based at {siteConfig.contact.address}. You can reach us at{" "}
         <a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a> or{" "}
         {siteConfig.contact.phone}.
       </p>
@@ -66,12 +66,12 @@ export function TermsContent() {
       <h2>8. Intellectual property</h2>
       <p>
         All content on this site — including text, graphics, logos, and images — belongs to{" "}
-        {siteConfig.fullName} or its licensors and may not be copied or reused without permission.
+        {siteConfig.legalName} or its licensors and may not be copied or reused without permission.
       </p>
 
       <h2>9. Limitation of liability</h2>
       <p>
-        To the extent permitted by law, {siteConfig.fullName} is not liable for indirect or
+        To the extent permitted by law, {siteConfig.legalName} is not liable for indirect or
         consequential losses arising from your use of the site or purchase of products. Nothing in
         these Terms limits liability that cannot be excluded under Sri Lankan law.
       </p>
