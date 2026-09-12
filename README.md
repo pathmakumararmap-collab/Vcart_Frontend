@@ -1,4 +1,4 @@
-# Royal SL Frontend
+# Vcart Frontend
 
 Production-ready storefront and admin panel for the Royal SL Ecommerce System, built against the Royal SL Laravel REST API.
 
