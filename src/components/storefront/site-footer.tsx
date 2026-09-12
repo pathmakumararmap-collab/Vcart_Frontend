@@ -34,6 +34,9 @@ export function SiteFooter() {
       links: [
         { href: "/login", label: t("signIn") },
         { href: "/register", label: t("createAccount") },
+        { href: "/terms", label: t("terms") },
+        { href: "/privacy", label: t("privacy") },
+        { href: "/refund-policy", label: t("refundPolicy") },
       ],
     },
   ];
