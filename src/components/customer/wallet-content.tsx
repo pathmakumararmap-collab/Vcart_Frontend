@@ -1,6 +1,8 @@
 "use client";
 
-import { useSearchParams, useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { CircleDollarSign, TrendingUp, Wallet as WalletIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -25,6 +27,8 @@ import { useCustomerOrders } from "@/hooks/use-orders";
 import { formatDate } from "@/lib/format";
 
 export function WalletContent() {
+  const t = useTranslations("Dashboard");
+  const tCommon = useTranslations("Common");
   const router = useRouter();
   const searchParams = useSearchParams();
   const page = Number(searchParams.get("page") ?? 1);
@@ -46,19 +50,19 @@ export function WalletContent() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="My wallet"
-        description="A summary of payment activity across your orders."
+        title={t("myWallet")}
+        description={t("walletSubtitle")}
       />
 
       <div className="stagger-children grid gap-4 sm:grid-cols-3">
-        <StatCard label="Total paid" value={new Intl.NumberFormat("en-LK", { style: "currency", currency: "LKR" }).format(totalPaid)} icon={WalletIcon} />
-        <StatCard label="Outstanding balance" value={new Intl.NumberFormat("en-LK", { style: "currency", currency: "LKR" }).format(totalOutstanding)} icon={CircleDollarSign} />
-        <StatCard label="Refunded orders" value={String(refundedCount)} icon={TrendingUp} />
+        <StatCard label={t("totalPaid")} value={new Intl.NumberFormat("en-LK", { style: "currency", currency: "LKR" }).format(totalPaid)} icon={WalletIcon} />
+        <StatCard label={t("outstandingBalance")} value={new Intl.NumberFormat("en-LK", { style: "currency", currency: "LKR" }).format(totalOutstanding)} icon={CircleDollarSign} />
+        <StatCard label={t("refundedOrders")} value={String(refundedCount)} icon={TrendingUp} />
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-display text-lg">Payment activity</CardTitle>
+          <CardTitle className="text-display text-lg">{t("paymentActivity")}</CardTitle>
         </CardHeader>
         <CardContent>
           {isLoading ? (
@@ -72,20 +76,20 @@ export function WalletContent() {
           ) : orders.length === 0 ? (
             <EmptyState
               icon={WalletIcon}
-              title="No payment activity yet"
-              description="Your payment history will appear here once you place an order."
+              title={t("noPaymentActivity")}
+              description={t("noPaymentActivityDesc")}
             />
           ) : (
             <>
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Order</TableHead>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Total</TableHead>
-                    <TableHead className="text-right">Paid</TableHead>
-                    <TableHead className="text-right">Balance</TableHead>
+                    <TableHead>{t("order")}</TableHead>
+                    <TableHead>{t("date")}</TableHead>
+                    <TableHead>{t("status")}</TableHead>
+                    <TableHead className="text-right">{tCommon("total")}</TableHead>
+                    <TableHead className="text-right">{t("paid")}</TableHead>
+                    <TableHead className="text-right">{t("balance")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -115,12 +119,12 @@ export function WalletContent() {
                   <PaginationContent>
                     <PaginationItem>
                       <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => goToPage(page - 1)}>
-                        Previous
+                        {t("previous")}
                       </Button>
                     </PaginationItem>
                     <PaginationItem>
                       <span className="text-muted-foreground px-3 text-sm">
-                        Page {page} of {data.meta.last_page}
+                        {t("pageOf", { page, total: data.meta.last_page })}
                       </span>
                     </PaginationItem>
                     <PaginationItem>
@@ -130,7 +134,7 @@ export function WalletContent() {
                         disabled={page >= data.meta.last_page}
                         onClick={() => goToPage(page + 1)}
                       >
-                        Next
+                        {t("next")}
                       </Button>
                     </PaginationItem>
                   </PaginationContent>

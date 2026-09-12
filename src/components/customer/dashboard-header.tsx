@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Bell, Menu } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -16,9 +16,11 @@ import { Logo } from "@/components/shared/logo";
 import { ModeToggle } from "@/components/shared/mode-toggle";
 import { UserNav } from "@/components/shared/user-nav";
 import { DashboardSidebarNav } from "@/components/customer/dashboard-sidebar";
+import { Link } from "@/i18n/navigation";
 import { useNotifications } from "@/hooks/use-notifications";
 
 export function DashboardHeader() {
+  const t = useTranslations("Dashboard");
   const { data } = useNotifications();
   const unreadCount = data?.unread_count ?? 0;
 
@@ -26,7 +28,7 @@ export function DashboardHeader() {
     <header className="glass-nav sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-border/60 px-4 lg:px-6">
       <Sheet>
         <SheetTrigger asChild>
-          <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Open menu">
+          <Button variant="ghost" size="icon" className="lg:hidden" aria-label={t("openMenu")}>
             <Menu className="size-5" />
           </Button>
         </SheetTrigger>
@@ -46,7 +48,7 @@ export function DashboardHeader() {
 
       <div className="ml-auto flex items-center gap-1">
         <Button variant="ghost" size="icon" className="relative" asChild>
-          <Link href="/dashboard/notifications" aria-label="Notifications">
+          <Link href="/dashboard/notifications" aria-label={t("notifications")}>
             <Bell className="size-5" />
             {unreadCount > 0 && (
               <Badge className="bg-gradient-gold text-accent-foreground absolute -top-1 -right-1 h-4.5 min-w-4.5 justify-center rounded-full border-0 px-1 text-[10px] shadow-luxury-sm">

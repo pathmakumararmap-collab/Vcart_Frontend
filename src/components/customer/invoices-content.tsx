@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Download, Receipt } from "lucide-react";
 
@@ -16,6 +17,7 @@ import { useCustomerOrders, useDownloadInvoice } from "@/hooks/use-orders";
 import { formatDate } from "@/lib/format";
 
 export function InvoicesContent() {
+  const t = useTranslations("Dashboard");
   const router = useRouter();
   const searchParams = useSearchParams();
   const page = Number(searchParams.get("page") ?? 1);
@@ -31,7 +33,7 @@ export function InvoicesContent() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="My invoices" description="Download invoices generated for your orders." />
+      <PageHeader title={t("myInvoices")} description={t("invoicesSubtitle")} />
 
       {isLoading ? (
         <div className="space-y-3">
@@ -44,8 +46,8 @@ export function InvoicesContent() {
       ) : invoicedOrders.length === 0 ? (
         <EmptyState
           icon={Receipt}
-          title="No invoices yet"
-          description="Invoices are generated once your order has been processed. Check back after your order ships."
+          title={t("noInvoicesYet")}
+          description={t("noInvoicesDesc")}
         />
       ) : (
         <>
@@ -63,7 +65,7 @@ export function InvoicesContent() {
                         <StatusBadge status={order.invoice!.status} />
                       </div>
                       <p className="text-muted-foreground text-xs">
-                        Order {order.order_no} · Issued {formatDate(order.invoice!.issued_at)}
+                        {t("order")} {order.order_no} · {t("issued")} {formatDate(order.invoice!.issued_at)}
                       </p>
                     </div>
                   </div>
@@ -81,7 +83,7 @@ export function InvoicesContent() {
                       disabled={downloadInvoice.isPending}
                     >
                       <Download className="size-3.5" />
-                      Download
+                      {t("download")}
                     </Button>
                   </div>
                 </CardContent>
@@ -94,12 +96,12 @@ export function InvoicesContent() {
               <PaginationContent>
                 <PaginationItem>
                   <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => goToPage(page - 1)}>
-                    Previous
+                    {t("previous")}
                   </Button>
                 </PaginationItem>
                 <PaginationItem>
                   <span className="text-muted-foreground px-3 text-sm">
-                    Page {page} of {data.meta.last_page}
+                    {t("pageOf", { page, total: data.meta.last_page })}
                   </span>
                 </PaginationItem>
                 <PaginationItem>
@@ -109,7 +111,7 @@ export function InvoicesContent() {
                     disabled={page >= data.meta.last_page}
                     onClick={() => goToPage(page + 1)}
                   >
-                    Next
+                    {t("next")}
                   </Button>
                 </PaginationItem>
               </PaginationContent>

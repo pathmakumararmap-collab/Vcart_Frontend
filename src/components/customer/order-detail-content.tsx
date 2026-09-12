@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { ArrowLeft, CheckCircle2, Download, MapPin, PackageX, Receipt } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -21,12 +21,15 @@ import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { ErrorState } from "@/components/shared/error-state";
 import { LoadingSpinner } from "@/components/shared/loading-spinner";
 import { OrderStatusBadge, PaymentStatusBadge } from "@/components/shared/status-badge";
+import { Link } from "@/i18n/navigation";
 import { useCancelOrder, useCustomerOrder, useDownloadInvoice } from "@/hooks/use-orders";
 import { formatDate, formatDateTime, formatOrderStatus } from "@/lib/format";
 
 const CANCELLABLE_STATUSES = ["pending", "confirmed"];
 
 export function OrderDetailContent({ orderId }: { orderId: number }) {
+  const t = useTranslations("Dashboard");
+  const tCommon = useTranslations("Common");
   const { data: order, isLoading, isError, refetch } = useCustomerOrder(orderId);
   const cancelOrder = useCancelOrder();
   const downloadInvoice = useDownloadInvoice();
@@ -50,7 +53,7 @@ export function OrderDetailContent({ orderId }: { orderId: number }) {
           <Button variant="ghost" size="sm" className="-ml-2" asChild>
             <Link href="/dashboard/orders">
               <ArrowLeft className="size-3.5" />
-              Back to orders
+              {t("backToOrders")}
             </Link>
           </Button>
           <div className="flex flex-wrap items-center gap-2">
@@ -58,7 +61,9 @@ export function OrderDetailContent({ orderId }: { orderId: number }) {
             <OrderStatusBadge status={order.status} />
             <PaymentStatusBadge status={order.payment_status} />
           </div>
-          <p className="text-muted-foreground text-sm">Placed on {formatDateTime(order.created_at)}</p>
+          <p className="text-muted-foreground text-sm">
+            {t("placedOn")} {formatDateTime(order.created_at)}
+          </p>
         </div>
         <div className="flex shrink-0 gap-2">
           {order.invoice && (
@@ -70,13 +75,13 @@ export function OrderDetailContent({ orderId }: { orderId: number }) {
               disabled={downloadInvoice.isPending}
             >
               <Download className="size-4" />
-              Invoice
+              {t("invoice")}
             </Button>
           )}
           {canCancel && (
             <Button variant="destructive" onClick={() => setCancelOpen(true)}>
               <PackageX className="size-4" />
-              Cancel order
+              {t("cancelOrder")}
             </Button>
           )}
         </div>
@@ -86,16 +91,16 @@ export function OrderDetailContent({ orderId }: { orderId: number }) {
         <div className="min-w-0 space-y-6">
           <Card className="min-w-0">
             <CardHeader>
-              <CardTitle className="text-display text-lg">Items</CardTitle>
+              <CardTitle className="text-display text-lg">{t("items")}</CardTitle>
             </CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Product</TableHead>
-                    <TableHead className="text-right">Qty</TableHead>
-                    <TableHead className="text-right">Unit price</TableHead>
-                    <TableHead className="text-right">Subtotal</TableHead>
+                    <TableHead>{t("product")}</TableHead>
+                    <TableHead className="text-right">{t("qty")}</TableHead>
+                    <TableHead className="text-right">{t("unitPrice")}</TableHead>
+                    <TableHead className="text-right">{tCommon("subtotal")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -121,24 +126,24 @@ export function OrderDetailContent({ orderId }: { orderId: number }) {
 
               <div className="ml-auto max-w-xs space-y-1.5 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Subtotal</span>
+                  <span className="text-muted-foreground">{tCommon("subtotal")}</span>
                   <Currency value={order.subtotal} />
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Discount</span>
+                  <span className="text-muted-foreground">{t("discount")}</span>
                   <Currency value={-order.discount_amount} />
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Tax</span>
+                  <span className="text-muted-foreground">{t("tax")}</span>
                   <Currency value={order.tax_amount} />
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Shipping</span>
+                  <span className="text-muted-foreground">{t("shipping")}</span>
                   <Currency value={order.shipping_amount} />
                 </div>
                 <Separator />
                 <div className="flex justify-between text-base font-semibold">
-                  <span>Total</span>
+                  <span>{tCommon("total")}</span>
                   <Currency value={order.total_amount} />
                 </div>
               </div>
@@ -147,12 +152,12 @@ export function OrderDetailContent({ orderId }: { orderId: number }) {
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-display text-lg">Track order</CardTitle>
+              <CardTitle className="text-display text-lg">{t("trackOrder")}</CardTitle>
             </CardHeader>
             <CardContent>
               {timeline.length === 0 ? (
                 <p className="text-muted-foreground text-sm">
-                  No status updates yet. Current status: {formatOrderStatus(order.status)}.
+                  {t("noStatusUpdates", { status: formatOrderStatus(order.status) })}
                 </p>
               ) : (
                 <ol className="space-y-0">
@@ -208,7 +213,7 @@ export function OrderDetailContent({ orderId }: { orderId: number }) {
                   <span className="bg-primary/10 text-primary flex size-8 items-center justify-center rounded-lg">
                     <MapPin className="size-4" />
                   </span>
-                  Shipping address
+                  {t("shippingAddress")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-sm">
@@ -228,16 +233,16 @@ export function OrderDetailContent({ orderId }: { orderId: number }) {
                   <span className="bg-primary/10 text-primary flex size-8 items-center justify-center rounded-lg">
                     <Receipt className="size-4" />
                   </span>
-                  Payments
+                  {t("payments")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="divide-border/60 divide-y text-sm">
                 {order.payments.map((payment) => (
                   <div key={payment.id} className="flex items-center justify-between py-2.5 first:pt-0 last:pb-0">
                     <div>
-                      <p className="font-medium">{payment.payment_method ?? "Payment"}</p>
+                      <p className="font-medium">{payment.payment_method ?? t("paymentFallback")}</p>
                       <p className="text-muted-foreground text-xs">
-                        {payment.paid_at ? formatDate(payment.paid_at) : "Pending"}
+                        {payment.paid_at ? formatDate(payment.paid_at) : t("pending")}
                       </p>
                     </div>
                     <Currency value={payment.amount} className="tabular-nums font-medium" />
@@ -252,9 +257,9 @@ export function OrderDetailContent({ orderId }: { orderId: number }) {
       <ConfirmDialog
         open={cancelOpen}
         onOpenChange={setCancelOpen}
-        title="Cancel this order?"
-        description="This will cancel your order. This action cannot be undone."
-        confirmLabel="Cancel order"
+        title={t("cancelOrderConfirmTitle")}
+        description={t("cancelOrderConfirmDesc")}
+        confirmLabel={t("cancelOrder")}
         loading={cancelOrder.isPending}
         onConfirm={() =>
           cancelOrder.mutate(

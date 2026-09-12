@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Bell, BellRing, CheckCheck } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -17,22 +18,24 @@ import {
 import { formatRelativeTime } from "@/lib/format";
 import type { AppNotification } from "@/types/notification";
 
-function describeNotification(notification: AppNotification): string {
-  const type = notification.data.type ?? notification.type;
-
-  switch (type) {
-    case "order.status_updated":
-      return `Your order status was updated to ${String(notification.data.status ?? "")}.`;
-    case "order.placed":
-      return "Your order has been placed successfully.";
-    case "low_stock_alert":
-      return "A product is running low on stock.";
-    default:
-      return (notification.data.message as string) ?? "You have a new notification.";
-  }
-}
-
 export function NotificationsContent() {
+  const t = useTranslations("Dashboard");
+
+  function describeNotification(notification: AppNotification): string {
+    const type = notification.data.type ?? notification.type;
+
+    switch (type) {
+      case "order.status_updated":
+        return t("orderStatusUpdated", { status: String(notification.data.status ?? "") });
+      case "order.placed":
+        return t("orderPlacedNotif");
+      case "low_stock_alert":
+        return t("lowStockAlert");
+      default:
+        return (notification.data.message as string) ?? t("newNotification");
+    }
+  }
+
   const { data, isLoading, isError, refetch } = useNotifications();
   const markRead = useMarkNotificationRead();
   const markAllRead = useMarkAllNotificationsRead();
@@ -43,13 +46,13 @@ export function NotificationsContent() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Notifications"
-        description="Updates about your orders and account."
+        title={t("notifications")}
+        description={t("notificationsSubtitle")}
         actions={
           unreadCount > 0 ? (
             <Button variant="outline" size="sm" onClick={() => markAllRead.mutate()} disabled={markAllRead.isPending}>
               <CheckCheck className="size-3.5" />
-              Mark all as read
+              {t("markAllRead")}
             </Button>
           ) : undefined
         }
@@ -64,7 +67,7 @@ export function NotificationsContent() {
       ) : isError ? (
         <ErrorState onRetry={() => refetch()} />
       ) : items.length === 0 ? (
-        <EmptyState icon={Bell} title="No notifications" description="You're all caught up." />
+        <EmptyState icon={Bell} title={t("noNotifications")} description={t("allCaughtUp")} />
       ) : (
         <div className="stagger-children space-y-2.5">
           {items.map((notification) => {
@@ -108,7 +111,7 @@ export function NotificationsContent() {
                       onClick={() => markRead.mutate(notification.id)}
                       disabled={markRead.isPending}
                     >
-                      Mark read
+                      {t("markRead")}
                     </Button>
                   )}
                 </CardContent>
