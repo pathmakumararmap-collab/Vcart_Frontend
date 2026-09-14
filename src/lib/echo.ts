@@ -12,18 +12,17 @@ declare global {
 
 let echoInstance: Echo<"reverb"> | null = null;
 
-/**
- * Returns a shared Echo/Reverb client, authenticated with the current
- * Sanctum token. Call this after the user is known to be logged in —
- * it returns null during SSR (no window) or when there's no auth token.
- */
 export function getEcho(): Echo<"reverb"> | null {
   if (typeof window === "undefined") return null;
 
   const token = useAuthStore.getState().token;
-  if (!token) return null;
+  if (!token) {
+    console.log("[Echo] No token, skipping connection");
+    return null;
+  }
 
   if (!echoInstance) {
+    console.log("[Echo] Creating new connection with host:", process.env.NEXT_PUBLIC_REVERB_HOST, "port:", process.env.NEXT_PUBLIC_REVERB_PORT);
     window.Pusher = Pusher;
 
     const useTLS = (process.env.NEXT_PUBLIC_REVERB_SCHEME ?? "http") === "https";
@@ -43,12 +42,18 @@ export function getEcho(): Echo<"reverb"> | null {
         },
       },
     });
+
+    echoInstance.connector.pusher.connection.bind("state_change", (states: { previous: string; current: string }) => {
+      console.log("[Echo] State:", states.previous, "→", states.current);
+    });
+    echoInstance.connector.pusher.connection.bind("error", (err: unknown) => {
+      console.error("[Echo] Connection error:", err);
+    });
   }
 
   return echoInstance;
 }
 
-/** Call on logout so the next login opens a fresh, correctly-authed connection. */
 export function disconnectEcho() {
   echoInstance?.disconnect();
   echoInstance = null;
