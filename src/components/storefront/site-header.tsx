@@ -118,7 +118,8 @@ export function SiteHeader() {
           </div>
         </form>
 
-        <div className="ml-auto flex items-center gap-0.5 md:ml-0">
+          <div className="ml-auto flex items-center gap-0.5 md:ml-0">
+          <div className="hidden items-center gap-0.5 md:flex">
           <LanguageSwitcher />
 
           <Button variant="ghost" size="icon" className="relative" asChild>
@@ -147,10 +148,11 @@ export function SiteHeader() {
             )}
           </Button>
 
+                  </div>
+
           <UserNav />
         </div>
       </div>
-
       {isHomepage && (
         <form
           onSubmit={handleSearch}

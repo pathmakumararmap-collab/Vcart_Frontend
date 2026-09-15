@@ -2,16 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu } from "lucide-react";
 
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/shared/logo";
 import { useUiStore } from "@/store/ui-store";
 import { useAuthStore } from "@/store/auth-store";
@@ -32,11 +29,6 @@ export function MobileNav() {
 
   return (
     <Sheet open={isOpen} onOpenChange={setOpen}>
-      <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open menu">
-          <Menu className="size-5" />
-        </Button>
-      </SheetTrigger>
       <SheetContent side="left" className="w-72">
         <SheetHeader>
           <SheetTitle asChild>

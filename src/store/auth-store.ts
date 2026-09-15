@@ -20,8 +20,11 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       token: null,
       isAuthenticated: false,
-      setAuth: (user, token) => {
+            setAuth: (user, token) => {
         setAuthCookie(token);
+        if (typeof window !== "undefined") {
+          localStorage.setItem("vcart-has-account", "1");
+        }
         set({ user, token, isAuthenticated: true });
       },
       setUser: (user) => set({ user }),
